@@ -7,6 +7,14 @@ dotenv.config();
 const app = express();
 const port = Number(process.env.PORT || 3000);
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  if (req.method === "OPTIONS") return res.sendStatus(204);
+  next();
+});
+
 app.use(express.json({ limit: "100kb" }));
 
 const client = process.env.OPENAI_API_KEY
@@ -67,7 +75,7 @@ app.post("/api/ai/analyze", async (req, res) => {
 
   try {
     const response = await client.responses.create({
-      model: process.env.OPENAI_MODEL || "gpt-6-luna",
+      model: process.env.OPENAI_MODEL || "gpt-5.1",
       instructions: systemPrompt,
       input,
       text: { format: { type: "json_object" } }
@@ -83,7 +91,7 @@ app.post("/api/ai/analyze", async (req, res) => {
     return res.json(data);
   } catch (error) {
     console.error("NEMAP AI error:", error);
-    return res.status(500).json({ error: "AI analizi sırasında bir hata oluştu." });
+    return res.status(502).json({ error: "AI analizi sırasında hata oluştu.", details: error?.message || "Bilinmeyen hata" });
   }
 });
 
