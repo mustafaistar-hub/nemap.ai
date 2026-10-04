@@ -33,7 +33,7 @@ Kurallar:
 - Günlük görevleri önceliklendir; az sayıda ama yüksek etkili görev üret.
 - Kullanıcının en büyük problemini doğrudan plana dahil et.
 - Sayısal hedeflerde matematiksel olarak tutarlı ol.
-- Cevabı yalnızca geçerli JSON olarak üret.
+-Yanıtını yalnızca geçerli JSON formatında ver. JSON dışında açıklama veya metin ekleme.
 
 JSON şeması:
 {
@@ -77,7 +77,7 @@ app.post("/api/ai/analyze", async (req, res) => {
     const response = await client.responses.create({
       model: process.env.OPENAI_MODEL || "gpt-5.1",
       instructions: systemPrompt,
-      input,
+      input: `Aşağıdaki kullanıcı verilerini analiz et. Yanıtını geçerli JSON formatında üret:\n${input}`,
       text: { format: { type: "json_object" } }
     });
 
