@@ -212,18 +212,10 @@ Sonucu yalnızca JSON olarak döndür.
     // --------------------------------------------------
 
     const response = await client.responses.create({
-      model: MODEL,
-
-      instructions: systemPrompt,
-
-      input: input,
-
-      text: {
-        format: {
-          type: "json_object",
-        },
-      },
-    });
+  model: MODEL,
+  instructions: systemPrompt,
+  input: input,
+});
 
     // --------------------------------------------------
     // RESPONSE PARSE
